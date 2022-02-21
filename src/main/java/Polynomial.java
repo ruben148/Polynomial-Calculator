@@ -5,12 +5,8 @@ public class Polynomial {
     private LinkedList<Monomial> monomials;
     private int degree;
 
-    Polynomial (LinkedList<Monomial> _monomials){
-        monomials = _monomials;
-
-        /////sort by power
-        Collections.sort(monomials, (m1, m2) -> m2.getPower() - m1.getPower());
-        ListIterator<Monomial> itr = monomials.listIterator();              /////add missing powers
+    private void addMissingPowers(){
+        ListIterator<Monomial> itr = monomials.listIterator();
         Monomial m1;
         Monomial m2;
         while(itr.hasNext()){
@@ -28,6 +24,34 @@ public class Polynomial {
                 itr.previous();
             }
         }
+    }
+
+    private void mergeMonomials(){
+        ListIterator<Monomial> itr = monomials.listIterator();
+        Monomial m1 = null;
+        Monomial m2;
+        if(itr.hasNext())
+            m1 = itr.next();
+        while(itr.hasNext()){
+            m2 = itr.next();
+            if (m1.getPower() == m2.getPower()) {
+                System.out.println(m1.getPower()+" - "+m2.getPower());
+                m1.setQ(m1.getQ() + m2.getQ());
+                m1 = itr.previous();
+                itr.remove();
+            }
+        }
+    }
+
+    public Polynomial (LinkedList<Monomial> _monomials){
+        monomials = _monomials;
+
+        Collections.sort(monomials, (m1, m2) -> m2.getPower() - m1.getPower());
+
+        addMissingPowers();
+
+        mergeMonomials();
+
         degree = monomials.get(0).getPower();
     }
 

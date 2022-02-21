@@ -54,6 +54,7 @@ public class Model {
         Iterator<Monomial> itrP = P.getMonomials().descendingIterator();
         Iterator<Monomial> itrQ = Q.getMonomials().descendingIterator();
         int power = 0;
+
         while(itrP.hasNext() || itrQ.hasNext()){
             Monomial m1,m2;
             try{
@@ -94,9 +95,17 @@ public class Model {
         }
         return new Polynomial(monomials);
     }
-/*
-    static Polynomial multiplyPolynomials(Polynomial P, Polynomial Q){
 
-    }*/
+    static Monomial multiplyMonomials(Monomial m1, Monomial m2){
+        return new Monomial(m1.getQ()* m2.getQ(), m1.getPower()+ m2.getPower());
+    }
+
+    static Polynomial multiplyPolynomials(Polynomial P, Polynomial Q){
+        LinkedList<Monomial> monomials = new LinkedList<>();
+        for(Monomial m1 : P.getMonomials())
+            for(Monomial m2 : Q.getMonomials())
+                monomials.add(multiplyMonomials(m1,m2));
+        return new Polynomial(monomials);
+    }
 
 }

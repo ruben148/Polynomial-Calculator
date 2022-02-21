@@ -3,7 +3,7 @@ public class Monomial {
     private int q;
     private int power;
 
-    Monomial(int q, int power){
+    public Monomial(int q, int power){
         this.q = q;
         this.power = power;
     }
@@ -14,5 +14,9 @@ public class Monomial {
 
     public int getQ() {
         return q;
+    }
+
+    public void setQ(int q) {
+        this.q = q;
     }
 }

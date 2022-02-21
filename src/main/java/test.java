@@ -14,12 +14,12 @@ public class test {
 
         Polynomial Sum = Model.addPolynomials(P,Q);
 
-        System.out.print("Sum:  ");
-        for(Monomial m : Sum.getMonomials()){
+        Polynomial Product = Model.multiplyPolynomials(P,Q);
+
+        System.out.println("Product: ");
+        for(Monomial m : Product.getMonomials()){
             System.out.println(m.getQ()+"*x^"+m.getPower());
         }
-
-
 
     }
 }
