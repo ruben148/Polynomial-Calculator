@@ -108,4 +108,21 @@ public class Model {
         return new Polynomial(monomials);
     }
 
+    static void derivative(Polynomial P){
+        Monomial m_remove = null;
+        for(Monomial m : P.getMonomials()){
+            m.setQ(m.getQ() * m.getPower());
+            m.setPower(m.getPower() - 1);
+            m_remove = m;
+        }
+        P.getMonomials().remove(m_remove);
+    }
+
+    static void integral(Polynomial P){
+        for(Monomial m : P.getMonomials()){
+            m.setQ(m.getQ()/(m.getPower()+1));
+            m.setPower(m.getPower()+1);
+        }
+        P.addMissingPowers();
+    }
 }

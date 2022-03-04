@@ -5,24 +5,40 @@ public class Polynomial {
     private LinkedList<Monomial> monomials;
     private int degree;
 
-    private void addMissingPowers(){
+    public void showList(){
+        System.out.println("");
+        System.out.println("");
+        for(Monomial m : monomials){
+            System.out.println(m.getQ()+"*x^"+m.getPower());
+        }
+        System.out.println("");
+        System.out.println("");
+    }
+
+    public void addMissingPowers(){
         ListIterator<Monomial> itr = monomials.listIterator();
-        Monomial m1;
-        Monomial m2;
-        while(itr.hasNext()){
+        Monomial m1 = null;
+        Monomial m2 = null;
+        if(itr.hasNext())
             m1 = itr.next();
-            if(itr.hasNext())
-            {
+        while(true) {
+            if(itr.hasNext()) {
                 m2 = itr.next();
-                if(m1.getPower() - m2.getPower() > 1){
+                if (m1.getPower() - m2.getPower() > 1) {
                     itr.previous();
-                    itr.add(new Monomial(0, m1.getPower()-1));
+                    itr.add(new Monomial(0, m2.getPower() + 1));
+                    itr.previous();
                 }
+                else
+                    m1 = m2;
             }
-            else if(m1.getPower()!=0){
-                itr.add(new Monomial(0, m1.getPower()-1));
+            else if(m2.getPower()>0)
+            {
+                itr.add(new Monomial(0, m2.getPower() - 1));
                 itr.previous();
+                m2 = itr.next();
             }
+            else break;
         }
     }
 
@@ -35,11 +51,13 @@ public class Polynomial {
         while(itr.hasNext()){
             m2 = itr.next();
             if (m1.getPower() == m2.getPower()) {
-                System.out.println(m1.getPower()+" - "+m2.getPower());
                 m1.setQ(m1.getQ() + m2.getQ());
-                m1 = itr.previous();
                 itr.remove();
+                itr.next();
+                m2=itr.previous();
             }
+            else
+                m1 = m2;
         }
     }
 
