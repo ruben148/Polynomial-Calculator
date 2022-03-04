@@ -4,50 +4,9 @@ import java.util.ListIterator;
 
 public class Model {
 
-    static String firstTransform(String _polynomial){               /////add missing '*', '+' (at the beginning) or '1*'
 
-        if(_polynomial.charAt(0) == 'x' || (_polynomial.charAt(0) > 47 && _polynomial.charAt(0) <= 57))
-            _polynomial = "+" + _polynomial;
 
-        int index = _polynomial.indexOf('x');
-        while(index >= 0) {
-            if (_polynomial.charAt(index - 1) == '+' || _polynomial.charAt(index - 1) == '-')
-                _polynomial = _polynomial.substring(0, index) + "1" + _polynomial.substring(index);
-            if ((_polynomial.charAt(index - 1) > 47 && _polynomial.charAt(index - 1) <= 57))
-                _polynomial = _polynomial.substring(0, index) + "*" + _polynomial.substring(index);
-            index = _polynomial.indexOf('x',index+1);
-        }
 
-        return _polynomial;
-    }
-
-    static Polynomial secondTransform(String _polynomial){             /////split and create a Monomial List => Polynomial
-        LinkedList<Monomial> monomials = new LinkedList<>();
-
-        for (String _monomial : _polynomial.split("(?=\\+)|(?=-)"))
-        {
-            int q = 1;
-            int power = 1;
-
-            int indexOfX = _monomial.indexOf('*');
-            int indexOfAt = _monomial.indexOf('^');
-
-            if(indexOfX == -1){
-                q = Integer.parseInt(_monomial);
-                power = 0;
-            }
-            else {
-                try {
-                    q = Integer.parseInt(_monomial.substring(0, indexOfX));
-                } catch (Exception ignored) {}
-                try {
-                    power = Integer.parseInt(_monomial.substring(indexOfAt + 1));
-                } catch (Exception ignored) {}
-            }
-            monomials.add(new Monomial(q, power));
-        }
-        return new Polynomial(monomials);
-    }
 
     static Polynomial addPolynomials(Polynomial P, Polynomial Q){
         LinkedList<Monomial> monomials = new LinkedList<>();
