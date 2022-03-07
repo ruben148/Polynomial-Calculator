@@ -1,66 +1,165 @@
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class GUI extends JFrame {
+
+    private JPanel numbers = new JPanel();
+    private JPanel controls = new JPanel();
+    private JPanel polynomial_labels = new JPanel();
+    private JPanel polynomials = new JPanel();
+
+    private Font font1 = new Font("Arial", Font.PLAIN, 30);
+    private Font font2 = new Font("Arial", Font.PLAIN, 20);
+    private Font font3 = new Font("Arial", Font.PLAIN, 14);
+
+    private JLabel firstPolynomial_label = new JLabel("First polynomial ");
+    private JLabel secondPolynomial_label = new JLabel("Second polynomial ");
+    private JLabel resultPolynomial_label = new JLabel("Result ");
+
+    private JButton btn0 = new JButton("0");
+    private JButton btn1 = new JButton("1");
+    private JButton btn2 = new JButton("2");
+    private JButton btn3 = new JButton("3");
+    private JButton btn4 = new JButton("4");
+    private JButton btn5 = new JButton("5");
+    private JButton btn6 = new JButton("6");
+    private JButton btn7 = new JButton("7");
+    private JButton btn8 = new JButton("8");
+    private JButton btn9 = new JButton("9");
+    private JButton btnX = new JButton("x");
+    private JButton btnPow = new JButton("^");
+    private JButton btnPlus = new JButton("+");
+    private JButton btnMinus = new JButton("-");
+    private JButton btnTimes = new JButton("*");
+    private JButton btnPoint = new JButton(".");
+    private JButton btnC = new JButton("C");
+    private JButton btnBackspace = new JButton("<");
+    private JButton btnSlash = new JButton("/");
+    private JButton btnEmpty = new JButton("");
+
+    private JTextField firstPolynomial = new JTextField("x^2-2x+1");
+    private JTextField secondPolynomial = new JTextField("x^3+2x^2+12");
+    private JTextField resultPolynomial = new JTextField();
+
+    private JButton btnAdd = new JButton("Add");
+    private JButton btnSubtract = new JButton("Subtract");
+    private JButton btnMultiply = new JButton("Multiply");
+    private JButton btnDivide = new JButton("Divide");
+    private JButton btnDerive1 = new JButton("Derivate1");
+    private JButton btnIntegrate1 = new JButton("Integrate1");
+    private JButton btnDerive2 = new JButton("Derivate2");
+    private JButton btnIntegrate2 = new JButton("Integrate2");
+
+    private JPanel derive = new JPanel();
+    private JPanel integrate = new JPanel();
+
+    private JSplitPane splitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, controls, numbers);
+    private JSplitPane splitPane3 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, polynomial_labels, polynomials);
+    private JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, splitPane3, splitPane2);
+
     GUI() {
         super("Polynomial calculator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(450, 600);
         setLocationRelativeTo(null);
 
-        JPanel numbers = new JPanel();
-        JPanel controls = new JPanel();
-        JPanel polynomial_labels = new JPanel();
-        JPanel polynomials = new JPanel();
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object s = e.getSource();
+                Component comp = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+                if(comp instanceof JTextComponent)
+                    ((JTextComponent) comp).setText(((JTextComponent) comp).getText() + ((JButton) s).getText());
+            }
+        };
+
+        derive.setLayout(new GridLayout(1,2));
+        integrate.setLayout(new GridLayout(1,2));
+        derive.add(btnDerive1);
+        derive.add(btnDerive2);
+        integrate.add(btnIntegrate1);
+        integrate.add(btnIntegrate2);
+        btn0.addActionListener(actionListener);
+        btn1.addActionListener(actionListener);
+        btn2.addActionListener(actionListener);
+        btn3.addActionListener(actionListener);
+        btn4.addActionListener(actionListener);
+        btn5.addActionListener(actionListener);
+        btn6.addActionListener(actionListener);
+        btn7.addActionListener(actionListener);
+        btn8.addActionListener(actionListener);
+        btn9.addActionListener(actionListener);
+        btnPlus.addActionListener(actionListener);
+        btnMinus.addActionListener(actionListener);
+        btnPow.addActionListener(actionListener);
+        btnSlash.addActionListener(actionListener);
+        btnPoint.addActionListener(actionListener);
+        btnTimes.addActionListener(actionListener);
+        btnX.addActionListener(actionListener);
+
+        btnBackspace.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Component comp = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+                if(comp instanceof JTextComponent)
+                    if(((JTextComponent) comp).getText().length() > 0)
+                        ((JTextComponent) comp).setText(((JTextComponent) comp).getText().substring(0,((JTextComponent) comp).getText().length()-1));
+            }
+        });
+
+        btnC.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Component comp = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+                if(comp instanceof JTextComponent)
+                    ((JTextComponent) comp).setText("");
+            }
+        });
+
+        resultPolynomial.setFocusable(false);
+
+        btn0.setFocusable(false);
+        btn1.setFocusable(false);
+        btn2.setFocusable(false);
+        btn3.setFocusable(false);
+        btn4.setFocusable(false);
+        btn5.setFocusable(false);
+        btn6.setFocusable(false);
+        btn7.setFocusable(false);
+        btn8.setFocusable(false);
+        btn9.setFocusable(false);
+        btnX.setFocusable(false);
+        btnPow.setFocusable(false);
+        btnMinus.setFocusable(false);
+        btnPlus.setFocusable(false);
+        btnTimes.setFocusable(false);
+        btnSlash.setFocusable(false);
+        btnPoint.setFocusable(false);
+        btnC.setFocusable(false);
+        btnBackspace.setFocusable(false);
+        btnEmpty.setFocusable(false);
 
         numbers.setLayout(new GridLayout(5, 4));
         controls.setLayout(new GridLayout(3, 2));
 
-        Font font1 = new Font("Arial", Font.PLAIN, 30);
-        Font font2 = new Font("Arial", Font.PLAIN, 20);
-        Font font3 = new Font("Arial", Font.PLAIN, 14);
+        firstPolynomial.setFont(font2);
+        secondPolynomial.setFont(font2);
+        resultPolynomial.setFont(font2);
 
-        JTextField polynomial1 = new JTextField();
-        JTextField polynomial2 = new JTextField();
-        JTextField polynomial_result = new JTextField();
-        polynomial1.setFont(font2);
-        polynomial2.setFont(font2);
-        polynomial_result.setFont(font2);
 
-        JLabel polynomial1_label = new JLabel("First polynomial ");
-        JLabel polynomial2_label = new JLabel("Second polynomial ");
-        JLabel polynomial_result_label = new JLabel("Result ");
+        firstPolynomial_label.setHorizontalAlignment(SwingConstants.RIGHT);
+        secondPolynomial_label.setHorizontalAlignment(SwingConstants.RIGHT);
+        resultPolynomial_label.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        polynomial1_label.setHorizontalAlignment(SwingConstants.RIGHT);
-        polynomial2_label.setHorizontalAlignment(SwingConstants.RIGHT);
-        polynomial_result_label.setHorizontalAlignment(SwingConstants.RIGHT);
+        firstPolynomial_label.setFont(font3);
+        secondPolynomial_label.setFont(font3);
+        resultPolynomial_label.setFont(font3);
 
-        polynomial1_label.setFont(font3);
-        polynomial2_label.setFont(font3);
-        polynomial_result_label.setFont(font3);
-
-        JButton btn0 = new JButton("0");
-        JButton btn1 = new JButton("1");
-        JButton btn2 = new JButton("2");
-        JButton btn3 = new JButton("3");
-        JButton btn4 = new JButton("4");
-        JButton btn5 = new JButton("5");
-        JButton btn6 = new JButton("6");
-        JButton btn7 = new JButton("7");
-        JButton btn8 = new JButton("8");
-        JButton btn9 = new JButton("9");
-        JButton btnX = new JButton("x");
-        JButton btnPow = new JButton("^");
-        JButton btnPlus = new JButton("+");
-        JButton btnMinus = new JButton("-");
-        JButton btnTimes = new JButton("*");
-        JButton btnPoint = new JButton(".");
-        JButton btnC = new JButton("C");
-        JButton btnBackspace = new JButton("<");
-        JButton btnSlash = new JButton("/");
-        JButton btnEmpty = new JButton("");
 
         btn0.setFont(font1);
         btn1.setFont(font1);
@@ -110,47 +209,38 @@ public class GUI extends JFrame {
 
         numbers.setVisible(true);
 
-        JButton btnAdd = new JButton("Add");
-        JButton btnSubtract = new JButton("Subtract");
-        JButton btnMultiply = new JButton("Multiply");
-        JButton btnDivide = new JButton("Divide");
-        JButton btnDerivative = new JButton("Derivative");
-        JButton btnIntegrate = new JButton("Integrate");
-
         btnAdd.setFont(font2);
         btnSubtract.setFont(font2);
         btnMultiply.setFont(font2);
         btnDivide.setFont(font2);
-        btnDerivative.setFont(font2);
-        btnIntegrate.setFont(font2);
+        btnDerive1.setFont(font3);
+        btnDerive2.setFont(font3);
+        btnIntegrate1.setFont(font3);
+        btnIntegrate2.setFont(font3);
 
         controls.add(btnAdd);
         controls.add(btnSubtract);
         controls.add(btnMultiply);
         controls.add(btnDivide);
-        controls.add(btnDerivative);
-        controls.add(btnIntegrate);
+        controls.add(derive);
+        controls.add(integrate);
 
-        polynomial_labels.setLayout(new GridLayout(3,1));
-        polynomials.setLayout(new GridLayout(3,1));
-        polynomial_labels.add(polynomial1_label);
-        polynomial_labels.add(polynomial2_label);
-        polynomial_labels.add(polynomial_result_label);
-        polynomials.add(polynomial1);
-        polynomials.add(polynomial2);
-        polynomials.add(polynomial_result);
-
-        JSplitPane splitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, controls,numbers);
-        JSplitPane splitPane3 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, polynomial_labels, polynomials);
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, splitPane3, splitPane2);
+        polynomial_labels.setLayout(new GridLayout(3, 1));
+        polynomials.setLayout(new GridLayout(3, 1));
+        polynomial_labels.add(firstPolynomial_label);
+        polynomial_labels.add(secondPolynomial_label);
+        polynomial_labels.add(resultPolynomial_label);
+        polynomials.add(firstPolynomial);
+        polynomials.add(secondPolynomial);
+        polynomials.add(resultPolynomial);
 
 
-        splitPane3.setDividerSize( 1 );
-        splitPane3.setContinuousLayout( true );
-        splitPane2.setDividerSize( 1 );
-        splitPane2.setContinuousLayout( true );
-        splitPane.setDividerSize( 1 );
-        splitPane.setContinuousLayout( true );
+        splitPane3.setDividerSize(1);
+        splitPane3.setContinuousLayout(true);
+        splitPane2.setDividerSize(1);
+        splitPane2.setContinuousLayout(true);
+        splitPane.setDividerSize(1);
+        splitPane.setContinuousLayout(true);
 
         splitPane3.setVisible(true);
         splitPane2.setVisible(true);
@@ -168,8 +258,7 @@ public class GUI extends JFrame {
         splitPane2.setDividerLocation(.4);
         splitPane3.setDividerLocation(.3);
 
-        addComponentListener(new ComponentAdapter()
-        {
+        addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
                 splitPane.setDividerLocation(.3);
                 splitPane2.setDividerLocation(.4);
@@ -178,9 +267,40 @@ public class GUI extends JFrame {
         });
 
 
+    }
 
+    public String getFirstPolynomial() {
+        return firstPolynomial.getText();
+    }
 
+    public String getSecondPolynomial() {
+        return secondPolynomial.getText();
+    }
 
+    public String getResultPolynomial() {
+        return resultPolynomial.getText();
+    }
 
+    public void addListeners(ActionListener sum, ActionListener sub, ActionListener mul, ActionListener div, ActionListener der1, ActionListener der2, ActionListener in1, ActionListener in2){
+        btnAdd.addActionListener(sum);
+        btnSubtract.addActionListener(sub);
+        btnMultiply.addActionListener(mul);
+        btnDivide.addActionListener(div);
+        btnDerive1.addActionListener(der1);
+        btnDerive2.addActionListener(der2);
+        btnIntegrate1.addActionListener(in1);
+        btnIntegrate2.addActionListener(in2);
+    }
+
+    public void setFirstPolynomial(String _firstPolynomial) {
+        firstPolynomial.setText(_firstPolynomial);
+    }
+
+    public void setSecondPolynomial(String _secondPolynomial) {
+        secondPolynomial.setText(_secondPolynomial);
+    }
+
+    public void setResultPolynomial(String _resultPolynomial) {
+        resultPolynomial.setText(_resultPolynomial);
     }
 }

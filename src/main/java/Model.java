@@ -3,12 +3,11 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 public class Model {
+    private Polynomial P = null;
+    private Polynomial Q = null;
+    private Polynomial result1 = null;
 
-
-
-
-
-    static Polynomial addPolynomials(Polynomial P, Polynomial Q){
+    public void addPolynomials(){
         LinkedList<Monomial> monomials = new LinkedList<>();
         Iterator<Monomial> itrP = P.getMonomials().descendingIterator();
         Iterator<Monomial> itrQ = Q.getMonomials().descendingIterator();
@@ -29,10 +28,10 @@ public class Model {
             monomials.add(new Monomial(m1.getQ() + m2.getQ(), power));
             power++;
         }
-        return new Polynomial(monomials);
+        result1 = new Polynomial(monomials);
     }
 
-    static Polynomial subtractPolynomials(Polynomial P, Polynomial Q){
+    public void subtractPolynomials(){
         LinkedList<Monomial> monomials = new LinkedList<>();
         Iterator<Monomial> itrP = P.getMonomials().descendingIterator();
         Iterator<Monomial> itrQ = Q.getMonomials().descendingIterator();
@@ -52,36 +51,72 @@ public class Model {
             monomials.add(new Monomial(m1.getQ() - m2.getQ(), power));
             power++;
         }
-        return new Polynomial(monomials);
+        result1 = new Polynomial(monomials);
     }
 
-    static Monomial multiplyMonomials(Monomial m1, Monomial m2){
+    public static Monomial multiplyMonomials(Monomial m1, Monomial m2){
         return new Monomial(m1.getQ()* m2.getQ(), m1.getPower()+ m2.getPower());
     }
 
-    static Polynomial multiplyPolynomials(Polynomial P, Polynomial Q){
+    public void multiplyPolynomials(){
         LinkedList<Monomial> monomials = new LinkedList<>();
         for(Monomial m1 : P.getMonomials())
             for(Monomial m2 : Q.getMonomials())
                 monomials.add(multiplyMonomials(m1,m2));
-        return new Polynomial(monomials);
+        result1 = new Polynomial(monomials);
     }
 
-    static void derivative(Polynomial P){
+    public void derivePolynomial(){
         Monomial m_remove = null;
-        for(Monomial m : P.getMonomials()){
+        Polynomial result = new Polynomial(P);
+        for(Monomial m : result.getMonomials()){
             m.setQ(m.getQ() * m.getPower());
             m.setPower(m.getPower() - 1);
             m_remove = m;
         }
-        P.getMonomials().remove(m_remove);
+        result.getMonomials().remove(m_remove);
+        result.addMissingPowers();
+        result.mergeMonomials();
+        result1 = result;
     }
 
-    static void integral(Polynomial P){
-        for(Monomial m : P.getMonomials()){
+    public void integratePolynomial(){
+        Polynomial result = new Polynomial(P);
+        for(Monomial m : result.getMonomials()){
             m.setQ(m.getQ()/(m.getPower()+1));
             m.setPower(m.getPower()+1);
         }
-        P.addMissingPowers();
+        result.addMissingPowers();
+        result1 = result;
+        result.addMissingPowers();
+        result.mergeMonomials();
+    }
+
+    public void setP(Polynomial p) {
+        P = p;
+    }
+
+    public void setQ(Polynomial q) {
+        Q = q;
+    }
+
+    public void setP(String p) {
+        P = new Polynomial(p);
+    }
+
+    public void setQ(String q) {
+        Q = new Polynomial(q);
+    }
+
+    public Polynomial getP() {
+        return P;
+    }
+
+    public Polynomial getQ() {
+        return Q;
+    }
+
+    public Polynomial getResult1() {
+        return result1;
     }
 }
