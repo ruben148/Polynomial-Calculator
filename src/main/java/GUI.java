@@ -42,8 +42,8 @@ public class GUI extends JFrame {
     private JButton btnSlash = new JButton("/");
     private JButton btnEmpty = new JButton("");
 
-    private JTextField firstPolynomial = new JTextField("x^2-2x+1");
-    private JTextField secondPolynomial = new JTextField("x^3+2x^2+12");
+    private JTextField firstPolynomial = new JTextField("6x^4-9x^2+18");
+    private JTextField secondPolynomial = new JTextField("x-3");
     private JTextField resultPolynomial = new JTextField();
 
     private JButton btnAdd = new JButton("Add");
@@ -65,7 +65,7 @@ public class GUI extends JFrame {
     GUI() {
         super("Polynomial calculator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(450, 600);
+        setSize(500, 600);
         setLocationRelativeTo(null);
 
         ActionListener actionListener = new ActionListener() {
@@ -121,7 +121,8 @@ public class GUI extends JFrame {
             }
         });
 
-        resultPolynomial.setFocusable(false);
+        //resultPolynomial.setFocusable(false);
+        resultPolynomial.setEditable(false);
 
         btn0.setFocusable(false);
         btn1.setFocusable(false);
@@ -256,13 +257,13 @@ public class GUI extends JFrame {
 
         splitPane.setDividerLocation(.3);
         splitPane2.setDividerLocation(.4);
-        splitPane3.setDividerLocation(.3);
+        splitPane3.setDividerLocation(132);
 
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
                 splitPane.setDividerLocation(.3);
                 splitPane2.setDividerLocation(.4);
-                splitPane3.setDividerLocation(.3);
+                splitPane3.setDividerLocation(132);
             }
         });
 

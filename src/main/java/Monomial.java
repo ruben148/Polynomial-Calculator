@@ -9,6 +9,10 @@ public class Monomial {
         return s;
     }
 
+    public void print(){
+        System.out.println(q+"*x^"+power);
+    }
+
     @Override
     public boolean equals(Object o){
         if(this == o)

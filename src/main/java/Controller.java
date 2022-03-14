@@ -38,8 +38,8 @@ public class Controller {
                     public void actionPerformed(ActionEvent e) {
                         model.setP(ui.getFirstPolynomial());
                         model.setQ(ui.getSecondPolynomial());
-                        model.multiplyPolynomials();
-                        ui.setResultPolynomial(model.getResult1().toString());
+                        model.dividePolynomials();
+                        ui.setResultPolynomial(model.getResult1().toString()+"   R: "+model.getRemainder().toString());
                     }
                 }, new ActionListener() {
                     @Override
@@ -52,7 +52,7 @@ public class Controller {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         model.setP(ui.getSecondPolynomial());
-                        model.integratePolynomial();
+                        model.derivePolynomial();
                         ui.setResultPolynomial(model.getResult1().toString());
                     }
                 }, new ActionListener() {

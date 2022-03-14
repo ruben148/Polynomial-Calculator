@@ -9,21 +9,21 @@ class PolynomialTest {
 
     @Test
     void splitTest() {
-        Polynomial t1 = new Polynomial("6x^4-2x^2+3x+1");
-        Polynomial t2 = new Polynomial("6x^4-2x^2");
+        Polynomial t1 = new Polynomial("6.2x^4-2/10*x^2+3x+1"); //6.2x^4-2/10*x^2+3x+1 si 6x^4-2.6x^2
+        Polynomial t2 = new Polynomial("6x^4-2.6x^2");
         Assertions.assertEquals(4, t1.getDegree());
         LinkedList<Monomial> t1L = new LinkedList<>();
         LinkedList<Monomial> t2L = new LinkedList<>();
 
-        t1L.add(new Monomial(6,4));
+        t1L.add(new Monomial(6.2,4));
         t1L.add(new Monomial(0,3));
-        t1L.add(new Monomial(-2,2));
+        t1L.add(new Monomial(-0.2,2));
         t1L.add(new Monomial(3,1));
         t1L.add(new Monomial(1,0));
 
         t2L.add(new Monomial(6,4));
         t2L.add(new Monomial(0,3));
-        t2L.add(new Monomial(-2,2));
+        t2L.add(new Monomial(-2.6,2));
         t2L.add(new Monomial(0,1));
         t2L.add(new Monomial(0,0));
 

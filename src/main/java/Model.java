@@ -1,11 +1,13 @@
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Scanner;
 
 public class Model {
     private Polynomial P = null;
     private Polynomial Q = null;
     private Polynomial result1 = null;
+    private Polynomial remainder = null;
 
     public void addPolynomials(){
         LinkedList<Monomial> monomials = new LinkedList<>();
@@ -29,6 +31,7 @@ public class Model {
             power++;
         }
         result1 = new Polynomial(monomials);
+        result1.deleteFirstZeroQ();
     }
 
     public void subtractPolynomials(){
@@ -52,18 +55,46 @@ public class Model {
             power++;
         }
         result1 = new Polynomial(monomials);
+        result1.deleteFirstZeroQ();
     }
 
-    public static Monomial multiplyMonomials(Monomial m1, Monomial m2){
-        return new Monomial(m1.getQ()* m2.getQ(), m1.getPower()+ m2.getPower());
+    public static Monomial multiplyMonomials(Monomial m1, Monomial m2) {
+        return new Monomial(m1.getQ() * m2.getQ(), m1.getPower() + m2.getPower());
     }
 
     public void multiplyPolynomials(){
-        LinkedList<Monomial> monomials = new LinkedList<>();
+        Polynomial mul = new Polynomial();
         for(Monomial m1 : P.getMonomials())
             for(Monomial m2 : Q.getMonomials())
-                monomials.add(multiplyMonomials(m1,m2));
-        result1 = new Polynomial(monomials);
+                mul.addMonomial(multiplyMonomials(m1,m2));
+        result1 = mul;
+        result1.deleteFirstZeroQ();
+    }
+
+    public static Monomial divideMonomials(Monomial m1, Monomial m2){
+        return new Monomial(m1.getQ()/ m2.getQ(), m1.getPower()-m2.getPower());
+    }
+
+    public void dividePolynomials() {
+        Polynomial mul = new Polynomial();
+        Polynomial De = P;
+        Polynomial I = Q;
+        Polynomial sub = De;
+        while (I.getDegree() <= sub.getDegree()) {
+            Monomial m = divideMonomials(sub.getHighestDegreeMonomial(), I.getHighestDegreeMonomial());
+            mul.addMonomial(m);
+            P = new Polynomial();
+            P.addMonomial(m);
+            Q = I;
+            multiplyPolynomials();
+            P = sub;
+            Q = result1;
+            subtractPolynomials();
+            sub = result1;
+        }
+        result1 = mul;
+        result1.deleteFirstZeroQ();
+        remainder = sub;
     }
 
     public void derivePolynomial(){
@@ -78,6 +109,7 @@ public class Model {
         result.addMissingPowers();
         result.mergeMonomials();
         result1 = result;
+        result1.deleteFirstZeroQ();
     }
 
     public void integratePolynomial(){
@@ -108,15 +140,11 @@ public class Model {
         Q = new Polynomial(q);
     }
 
-    public Polynomial getP() {
-        return P;
-    }
-
-    public Polynomial getQ() {
-        return Q;
-    }
-
     public Polynomial getResult1() {
         return result1;
+    }
+
+    public Polynomial getRemainder() {
+        return remainder;
     }
 }

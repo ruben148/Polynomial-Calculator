@@ -3,14 +3,13 @@ import java.util.*;
 public class Polynomial {
 
     private LinkedList<Monomial> monomials;
-    private int degree;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Polynomial that = (Polynomial) o;
-        if(degree != that.degree)
+        if(getDegree() != that.getDegree())
             return false;
         LinkedList<Monomial> thatMonomials = that.getMonomials();
         if (thatMonomials.size() != monomials.size())
@@ -45,21 +44,31 @@ public class Polynomial {
         {
             double q = 1;
             int power = 1;
-
             int indexOfX = _monomial.indexOf('*');
             int indexOfAt = _monomial.indexOf('^');
-
             if(indexOfX == -1){
-                q = Double.parseDouble(_monomial);
-                power = 0;
+                try {
+                    q = Double.parseDouble(_monomial);
+                }catch(Exception e) {
+                    int indexOfSlash = _monomial.indexOf('/');
+                    double a = Double.parseDouble(_monomial.substring(0, indexOfSlash));
+                    double b = Double.parseDouble(_monomial.substring(indexOfSlash + 1));
+                    q = a / b;
+                }
+                power=0;
             }
             else {
                 try {
-                    q = Integer.parseInt(_monomial.substring(0, indexOfX));
-                } catch (Exception ignored) {}
+                    q = Double.parseDouble(_monomial.substring(0, indexOfX));
+                } catch (Exception e) {
+                    int indexOfSlash = _monomial.indexOf('/');
+                    double a = Double.parseDouble(_monomial.substring(0, indexOfSlash));
+                    double b = Double.parseDouble(_monomial.substring(indexOfSlash + 1, indexOfX));
+                    q = a / b;
+                }
                 try {
                     power = Integer.parseInt(_monomial.substring(indexOfAt + 1));
-                } catch (Exception ignored) {}
+                } catch (Exception e) {}
             }
             monomials.add(new Monomial(q, power));
         }
@@ -139,17 +148,26 @@ public class Polynomial {
         Monomial m2;
         if(itr.hasNext())
             m1 = itr.next();
-        while(itr.hasNext()){
+        while(itr.hasNext()) {
             m2 = itr.next();
             if (m1.getPower() == m2.getPower()) {
                 m1.setQ(m1.getQ() + m2.getQ());
                 itr.remove();
-                itr.next();
-                m2=itr.previous();
-            }
-            else
+                try {
+                    itr.next();
+                } catch (Exception e) {
+                    break;
+                }
+                m2 = itr.previous();
+            } else
                 m1 = m2;
         }
+    }
+
+    public void deleteFirstZeroQ() {
+        if (monomials.size() > 0)
+            if (monomials.get(0).getQ() == 0)
+                monomials.remove(0);
     }
 
     public Polynomial (LinkedList<Monomial> _monomials){
@@ -161,7 +179,7 @@ public class Polynomial {
 
         mergeMonomials();
 
-        degree = monomials.get(0).getPower();
+        deleteFirstZeroQ();
     }
 
     public Polynomial (String _polynomial){
@@ -170,11 +188,24 @@ public class Polynomial {
 
     public Polynomial (Polynomial copy_from){
         this.monomials = (LinkedList<Monomial>) copy_from.getMonomials().clone();
-        this.degree = copy_from.getDegree();
+    }
+
+    public Polynomial (){
+        monomials = new LinkedList<>();
     }
 
     public int getDegree() {
-        return degree;
+        for (Monomial m : monomials)
+            if (m.getQ() != 0)
+                return m.getPower();
+        return 0;
+    }
+
+    public void addMonomial(Monomial m){
+        monomials.add(m);
+        Collections.sort(monomials, (m1, m2) -> m2.getPower() - m1.getPower());
+        addMissingPowers();
+        mergeMonomials();
     }
 
     public LinkedList<Monomial> getMonomials() {
@@ -182,6 +213,9 @@ public class Polynomial {
     }
 
     public Monomial getHighestDegreeMonomial() {
+        for (Monomial m : monomials)
+            if (m.getQ() != 0)
+                return m;
         return monomials.get(0);
     }
 
